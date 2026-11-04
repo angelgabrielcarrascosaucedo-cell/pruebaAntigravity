@@ -5,11 +5,19 @@
   --primary: #2563eb;
   --primary-hover: #1d4ed8;
   --primary-light: #eff6ff;
+  --success: #10b981;
+  --success-dark: #047857;
+  --warning: #f59e0b;
+  --warning-dark: #b45309;
+  --danger: #ef4444;
+  --danger-dark: #b91c1c;
+
   --text-main: #0f172a;
   --text-muted: #64748b;
   --bg-page: #f8fafc;
   --bg-surface: #ffffff;
   --border-color: #e2e8f0;
+  
   --border-radius-sm: 8px;
   --border-radius-md: 12px;
   --border-radius-lg: 16px;
@@ -28,6 +36,7 @@
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 
   --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --transition: all 0.2s ease-in-out;
@@ -207,6 +216,10 @@ body {
   gap: 1.25rem;
 }
 
+.offers-grid.hidden {
+  display: none;
+}
+
 /* ==========================================================
    TARJETA DE PROMOCIÓN
    ========================================================== */
@@ -228,6 +241,11 @@ body {
   transform: translateY(-3px);
   box-shadow: var(--shadow-lg);
   border-color: #cbd5e1;
+}
+
+.promo-card-top {
+  display: flex;
+  flex-direction: column;
 }
 
 .promo-card-header {
@@ -339,6 +357,7 @@ body {
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  gap: 0.4rem;
 }
 
 .promo-btn:hover {
@@ -398,6 +417,534 @@ body {
 }
 
 /* ==========================================================
+   MODAL SUPERPUESTO (OVERLAY MODAL)
+   ========================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.modal-overlay.hidden {
+  display: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal-container {
+  background-color: var(--bg-surface);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-xl);
+  max-width: 650px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  animation: modalSlideUp 0.25s ease-out;
+  border: 1px solid var(--border-color);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #f1f5f9;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  z-index: 10;
+}
+
+.modal-close-btn:hover {
+  background-color: #e2e8f0;
+  color: var(--text-main);
+  transform: rotate(90deg);
+}
+
+.modal-content {
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Encabezado del modal */
+.modal-header {
+  padding-right: 2.5rem;
+}
+
+.modal-top-tags {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.modal-category-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--primary);
+  background-color: var(--primary-light);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--border-radius-full);
+}
+
+.modal-web-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  background-color: #ede9fe;
+  color: #6d28d9;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--border-radius-full);
+}
+
+.modal-brand {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1.4;
+}
+
+.modal-description {
+  font-size: 0.95rem;
+  color: #475569;
+  line-height: 1.6;
+}
+
+/* Metadatos (Horarios, Dirección, Fechas) */
+.modal-info-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  background-color: #f8fafc;
+  padding: 1rem;
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+}
+
+.info-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.info-text strong {
+  display: block;
+  color: var(--text-main);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.info-text span {
+  color: var(--text-muted);
+}
+
+/* Reglas de la promoción */
+.modal-rules-box {
+  background-color: #fffbeb;
+  border: 1px solid #fef3c7;
+  padding: 1rem;
+  border-radius: var(--border-radius-md);
+}
+
+.modal-rules-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #92400e;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.modal-rules-list {
+  padding-left: 1.25rem;
+  font-size: 0.825rem;
+  color: #78350f;
+  line-height: 1.5;
+}
+
+.modal-rules-list li {
+  margin-bottom: 0.25rem;
+}
+
+/* Sección de Redes Sociales */
+.modal-social-section {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1rem;
+}
+
+.modal-social-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-main);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.social-buttons-container {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.social-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--border-radius-full);
+  font-size: 0.825rem;
+  font-weight: 600;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.social-btn.instagram:hover {
+  background: #fdf2f8;
+  color: #db2777;
+  border-color: #f472b6;
+}
+
+.social-btn.facebook:hover {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #93c5fd;
+}
+
+.social-btn.whatsapp:hover {
+  background: #ecfdf5;
+  color: #059669;
+  border-color: #6ee7b7;
+}
+
+.social-btn.twitter:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
+.no-social-message {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* ==========================================================
+   FUNCIÓN NUEVA: PARTICIPACIÓN EN EVENTOS WEB Y CUPOS
+   ========================================================== */
+.web-participation-section {
+  border: 2px solid #818cf8;
+  border-radius: var(--border-radius-md);
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.participation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.participation-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #4338ca;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.slots-counter-badge {
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--border-radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.slots-counter-badge.available {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.slots-counter-badge.exhausted {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+/* Botón principal de participar */
+.participate-action-btn {
+  background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+  color: #ffffff;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.participate-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px -1px rgba(79, 70, 229, 0.4);
+}
+
+/* Alerta de guía interactiva */
+.guidance-banner {
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.85rem;
+  line-height: 1.45;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  animation: pulseGuidance 1s infinite alternate;
+}
+
+@keyframes pulseGuidance {
+  from { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.3); }
+  to { box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3); }
+}
+
+/* Contenedor de las dos oportunidades cuando cupos = 0 */
+.opportunities-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.opportunities-intro {
+  font-size: 0.875rem;
+  color: #475569;
+}
+
+.opportunity-card {
+  background-color: #ffffff;
+  border-radius: var(--border-radius-md);
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  transition: var(--transition);
+}
+
+.opportunity-card.highlight {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  background-color: #f0fdf4;
+}
+
+.opportunity-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.opportunity-desc {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Botón Oportunidad Video (Gratis) */
+.btn-video-chance {
+  background-color: #10b981;
+  color: #ffffff;
+  padding: 0.65rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.btn-video-chance:hover {
+  background-color: #059669;
+}
+
+.btn-video-chance:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* Simulación de Video */
+.video-sim-container {
+  background-color: #0f172a;
+  color: #f8fafc;
+  border-radius: var(--border-radius-sm);
+  padding: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.video-sim-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #93c5fd;
+}
+
+.video-progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #334155;
+  border-radius: var(--border-radius-full);
+  overflow: hidden;
+}
+
+.video-progress-fill {
+  height: 100%;
+  background-color: #38bdf8;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.video-sim-countdown {
+  font-size: 0.75rem;
+  color: #cbd5e1;
+}
+
+/* Botón Oportunidad Tarifa */
+.btn-paid-chance {
+  background-color: #f59e0b;
+  color: #ffffff;
+  padding: 0.65rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.btn-paid-chance:hover {
+  background-color: #d97706;
+}
+
+/* Resultado interactivo de la acción */
+.participation-result-box {
+  padding: 0.85rem;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.85rem;
+  line-height: 1.45;
+  margin-top: 0.5rem;
+}
+
+.participation-result-box.success {
+  background-color: #ecfdf5;
+  border: 1px solid #6ee7b7;
+  color: #065f46;
+}
+
+.participation-result-box.info {
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+}
+
+.participation-result-box.warning {
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+}
+
+.participation-result-box.danger {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+/* ==========================================================
    FOOTER
    ========================================================== */
 .footer {
@@ -413,7 +960,6 @@ body {
 /* ==========================================================
    MEDIA QUERIES (TABLETS Y PANTALLAS GRANDES)
    ========================================================== */
-/* Tablets (>= 640px) */
 @media (min-width: 640px) {
   .top-bar-container {
     flex-direction: row;
@@ -429,6 +975,10 @@ body {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .modal-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .promo-footer {
     flex-direction: row;
     align-items: center;
@@ -440,7 +990,6 @@ body {
   }
 }
 
-/* Desktop (>= 1024px) */
 @media (min-width: 1024px) {
   .offers-grid {
     grid-template-columns: repeat(3, 1fr);

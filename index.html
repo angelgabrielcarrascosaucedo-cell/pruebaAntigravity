@@ -25,8 +25,8 @@
         <input 
           type="search" 
           id="search-input" 
-          placeholder="Buscar por tienda, producto o promo..." 
-          aria-label="Buscar promociones"
+          placeholder="Buscar por título, descripción o categoría..." 
+          aria-label="Buscar promociones por título, descripción o categoría"
           autocomplete="off"
         >
       </div>
@@ -58,10 +58,20 @@
     <div id="empty-state" class="empty-state hidden">
       <div class="empty-state-icon">🔎</div>
       <h3>No encontramos promociones</h3>
-      <p>Prueba buscando con otros términos o seleccionando otra categoría.</p>
+      <p>Prueba buscando con otros términos de título, descripción o categoría.</p>
       <button id="reset-filters-btn" class="reset-btn">Restablecer filtros</button>
     </div>
   </main>
+
+  <!-- MODAL SUPERPUESTO DE PROMOCIÓN DETALLADA -->
+  <div id="promo-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-promo-title">
+    <div class="modal-container">
+      <button class="modal-close-btn" id="modal-close-btn" aria-label="Cerrar ventana emergente">&times;</button>
+      <div id="modal-content" class="modal-content">
+        <!-- Contenido inyectado dinámicamente según la promo seleccionada -->
+      </div>
+    </div>
+  </div>
 
   <footer class="footer">
     <p>&copy; 2026 PromoLocal — Apoya al comercio de tu barrio.</p>
