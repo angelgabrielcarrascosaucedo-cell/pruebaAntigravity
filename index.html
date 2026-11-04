@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PromoLocal - Descubre Promociones Locales</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Barra Superior / Header -->
+  <header class="top-bar">
+    <div class="top-bar-container">
+      <div class="brand">
+        <span class="brand-icon">🏷️</span>
+        <h1 class="brand-name">Promo<span>Local</span></h1>
+      </div>
+      
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input 
+          type="search" 
+          id="search-input" 
+          placeholder="Buscar por tienda, producto o promo..." 
+          aria-label="Buscar promociones"
+          autocomplete="off"
+        >
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- Filtros Rápidos -->
+    <section class="filters-section" aria-label="Filtros de promociones">
+      <div class="filters-wrapper">
+        <button class="filter-btn active" data-filter="all">Todas</button>
+        <button class="filter-btn" data-filter="Cierre de puertas">Cierre de puertas</button>
+        <button class="filter-btn" data-filter="Liquidación">Liquidación</button>
+        <button class="filter-btn" data-filter="2x1">2x1</button>
+      </div>
+    </section>
+
+    <!-- Resumen y Contador -->
+    <section class="results-header">
+      <p id="results-count" class="results-count">Mostrando ofertas disponibles</p>
+    </section>
+
+    <!-- Contenedor de la Cuadrícula de Ofertas -->
+    <section id="offers-grid" class="offers-grid" aria-live="polite">
+      <!-- Las tarjetas se inyectan dinámicamente con JavaScript -->
+    </section>
+
+    <!-- Estado vacío (cuando no hay coincidencias) -->
+    <div id="empty-state" class="empty-state hidden">
+      <div class="empty-state-icon">🔎</div>
+      <h3>No encontramos promociones</h3>
+      <p>Prueba buscando con otros términos o seleccionando otra categoría.</p>
+      <button id="reset-filters-btn" class="reset-btn">Restablecer filtros</button>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 PromoLocal — Apoya al comercio de tu barrio.</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
